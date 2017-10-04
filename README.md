@@ -82,7 +82,7 @@ Note the usage of the background thread to avoid any potential responsiveness is
 
 ## Usage
 
-The [Storj](https://github.com/Storj/android-libstorj/blob/master/libstorj/src/main/java/io/storj/libstorj/Storj.java) class is the main entry point to the Java API.
+The [Storj](libstorj/src/main/java/io/storj/libstorj/Storj.java) class is the main entry point to the Java API.
 
 ## Sample app
 
