@@ -46,13 +46,12 @@ public class StorjAndroid {
      * <p>The returned instance will be an existing instance when possible.</p>
      *
      * <p>Calling this method compared to {@link Storj#getInstance()} will do the required
-     * initialization for the libstorj library to work correctly on Android. For example:
+     * initialization for the libstorj library to work correctly on Android. For example:</p>
      * <ul>
      *     <li>Set the app's internal data directory as the working directory</li>
      *     <li>Set the app's cache directory as the temp directory</li>
      *     <li>Copy a CA Certs file to the device and configure libstorj to use it</li>
      * </ul>
-     * </p>
      *
      * @param context a reference to {@link Context} to retrieve info about the app environment
      * @return a {@link Storj} instance, never null
