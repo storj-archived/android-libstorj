@@ -14,81 +14,27 @@ The library includes:
 
 ## Setup
 
-### 1. Provide the Gradle dependency
-
-Add the dependency to the `build.gradle` file of the app module:
+Add the Gradle dependency to the `build.gradle` file of the app module:
 
 ```
 dependencies {
-    compile 'io.storj:libstorj-android:0.1'
+    compile 'io.storj:libstorj-android:0.2'
 }
 ```
-
-### 2. Set the app directory
-
-The app directory is where the authentication files with encryption keys are created. Usually this is done in the user's home directory. However, there is no such user's home directory on the Android platform. Instead there is a separate _data directory_ for each Android application where it can write internal data files.
-
-It would be best if your Android app extends the [Application](https://developer.android.com/reference/android/app/Application.html) class and set the app directory in the `onCreate()` method like this:
-
-```java
-Storj.appDir = getFilesDir().getPath();
-```
-
-### 3. Set the temp directory
-
-The sharding process in libstorj requires the usage of the temp directory. However, there is no global temp directory in the Android platform. Your Android app should set the temp directory to the app's cache directory using the `STORJ_TEMP` environment variable.
-
-It would be best if your Android app extends the [Application](https://developer.android.com/reference/android/app/Application.html) class and set the `STORJ_TEMP` variable in the `onCreate()` method like this:
-
-```java
-try {
-    Os.setenv("STORJ_TEMP", getCacheDir().getPath(), true);
-} catch (ErrnoException e) {
-    Log.e(App.class.getName(), e.getMessage(), e);
-}
-```
-
-### 4. Pack and extract the CA Certs file
-
-The libstorj library uses the [curl](https://curl.haxx.se/) library to communicate with the Storj Bridge API hosted at https://api.storj.io over a secured HTTPS connection. The proper establishment of the secure connection requires that the server certificate is verified. The verification is done against a set of Trusted Root Certificates stored in the so called CA Certs file.
-  
-Unfortunately does not provide such CA Certs file, so your Android app should pack it and extract it when started.
-
-The CA Certs file can be obtained from the curl web site: https://curl.haxx.se/ca/cacert.pem
-
-The file should be packed in the app's `assets/` directory.
-
-Finally, upon startup the app should use the [AssetManager](https://developer.android.com/reference/android/content/res/AssetManager.html) to extract the CA Certs file to it's application directory and set the `STORJ_CAINFO` environment variable to its path. It would be best if your Android app extends the [Application](https://developer.android.com/reference/android/app/Application.html) class and do it like this in the `onCreate()` method:
-
-```java
-new Thread() {
-    @Override
-    public void run() {
-        Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
-        String filename = "cacert.pem";
-        AssetManager assetManager = getAssets();
-        try (InputStream in = assetManager.open(filename);
-            OutputStream out = openFileOutput(filename, Context.MODE_PRIVATE)) {
-            copy(in, out);
-            Os.setenv("STORJ_CAINFO", getFileStreamPath(filename).getPath(), true);
-        } catch (IOException | ErrnoException e) {
-            Log.e(App.class.getName(), e.getMessage(), e);
-        }
-    }
-}.start();
-```
-
-Note the usage of the background thread to avoid any potential responsiveness issues during app startup.
 
 ## Usage
 
-The [Storj](libstorj/src/main/java/io/storj/libstorj/Storj.java) class is the main entry point to the Java API.
+Use the [StorjAndroid](libstorj/src/main/java/io/storj/libstorj/android/StorjAndroid.java) factory to get an instance of the [Storj](libstorj/src/main/java/io/storj/libstorj/Storj.java) class, properly initialized for Android:
+
+```java
+Storj storj = StorjAndroid.getInstance(getContext());
+```
+
+Use the public methods of the [Storj](libstorj/src/main/java/io/storj/libstorj/Storj.java) class to work with the Storj network.
 
 ## Sample app
 
 [Hello Storj](https://github.com/kaloyan-raev/hello-storj) is a sample Android app that demonstrates the setup and usage of this library.
-
-Pay attention on the [App](https://github.com/kaloyan-raev/hello-storj/blob/master/app/src/main/java/name/raev/kaloyan/hellostorj/App.java) class implementation.
 
 ## License
 
