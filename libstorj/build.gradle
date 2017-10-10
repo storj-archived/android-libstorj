@@ -39,6 +39,15 @@ android {
     }
 }
 
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.novoda:bintray-release:0.5.0'
+    }
+}
+
 publish {
     userOrg = 'kaloyan-raev'
     groupId = 'io.storj'
