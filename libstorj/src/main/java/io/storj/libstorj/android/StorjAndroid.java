@@ -72,10 +72,21 @@ public class StorjAndroid {
         initialized = true;
     }
 
+    /*
+     * The app directory is where the authentication files with encryption keys are created.
+     * Usually this is done in the user's home directory. However, there is no such user's home
+     * directory on the Android platform. Instead there is a separate data directory for each
+     * Android application where it can write internal data files.
+     */
     private static void setAppDir(Context context) {
         Storj.appDir = context.getFilesDir().getPath();
     }
 
+    /*
+     * The sharding process in libstorj requires the usage of the temp directory. However, there is
+     * no global temp directory in the Android platform. The Android app should set the temp
+     * directory to the app's cache directory using the STORJ_TEMP environment variable.
+     */
     private static void setTempDir(Context context) {
         try {
             Os.setenv("STORJ_TEMP", context.getCacheDir().getPath(), true);
@@ -84,6 +95,15 @@ public class StorjAndroid {
         }
     }
 
+    /*
+     * The libstorj library uses curl to communicate with the Storj Bridge API hosted at
+     * https://api.storj.io over a secured HTTPS connection. The proper establishment of the
+     * secure connection requires that the server certificate is verified. The verification is
+     * done against a set of Trusted Root Certificates stored in the so called CA Certs file.
+     *
+     * Unfortunately, Android does not provide such CA Certs file. Hence the factory will extract
+     * a proper CA Certs file from its assets/ directory to the app's internal data directory.
+     */
     private static void copyCABundle(final Context context) {
         String filename = "cacert.pem";
         AssetManager assetManager = context.getAssets();
