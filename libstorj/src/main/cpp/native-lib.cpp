@@ -20,6 +20,8 @@
 #include <nettle/version.h>
 #include <microhttpd/microhttpd.h>
 
+#define INIT_ENV_ERROR "Failed to initialize Storj environment"
+
 typedef struct {
     JNIEnv *env;
     jobject callbackObject;
@@ -100,13 +102,7 @@ static storj_env_t *init_env(
             .level = 0
     };
 
-    storj_env_t *storj_env = storj_init_env(&options, &encrypt_options, &http_options, &log_options);
-
-    if (!storj_env) {
-        error_callback(env, callbackObject, "Failed to initialize Storj environment");
-    }
-
-    return storj_env;
+    return storj_init_env(&options, &encrypt_options, &http_options, &log_options);
 }
 
 static void get_buckets_callback(uv_work_t *work_req, int status)
@@ -180,7 +176,9 @@ Java_io_storj_libstorj_Storj__1getBuckets(
 
     storj_env_t *storj_env = init_env(env, callbackObject, user, pass, mnemonic);
 
-    if (storj_env) {
+    if (!storj_env) {
+        error_callback(env, callbackObject, INIT_ENV_ERROR);
+    } else {
         jcallback_t jcallback = {
                 .env = env,
                 .callbackObject = callbackObject
@@ -263,7 +261,9 @@ Java_io_storj_libstorj_Storj__1getBucket(
 
     storj_env_t *storj_env = init_env(env, callbackObject, user, pass, mnemonic);
 
-    if (storj_env) {
+    if (!storj_env) {
+        error_callback(env, callbackObject, INIT_ENV_ERROR);
+    } else {
         jcallback_t jcallback = {
                 .env = env,
                 .callbackObject = callbackObject
@@ -346,7 +346,9 @@ Java_io_storj_libstorj_Storj__1createBucket(
 
     storj_env_t *storj_env = init_env(env, callbackObject, user, pass, mnemonic);
 
-    if (storj_env) {
+    if (!storj_env) {
+        error_callback(env, callbackObject, INIT_ENV_ERROR);
+    } else {
         jcallback_t jcallback = {
                 .env = env,
                 .callbackObject = callbackObject
@@ -468,7 +470,9 @@ Java_io_storj_libstorj_Storj__1listFiles(
 
     storj_env_t *storj_env = init_env(env, callbackObject, user, pass, mnemonic);
 
-    if (storj_env) {
+    if (!storj_env) {
+        error_callback(env, callbackObject, INIT_ENV_ERROR);
+    } else {
         jcallback_t jcallback = {
                 .env = env,
                 .callbackObject = callbackObject
@@ -593,7 +597,9 @@ Java_io_storj_libstorj_Storj__1downloadFile(
 
     storj_env_t *storj_env = init_env(env, callbackObject, user, pass, mnemonic);
 
-    if (storj_env) {
+    if (!storj_env) {
+        error_callback(env, callbackObject, file_, INIT_ENV_ERROR);
+    } else {
         jcallback_t jcallback = {
                 .env = env,
                 .callbackObject = callbackObject
@@ -753,7 +759,9 @@ Java_io_storj_libstorj_Storj__1uploadFile(
 
     storj_env_t *storj_env = init_env(env, callbackObject, user, pass, mnemonic);
 
-    if (storj_env) {
+    if (!storj_env) {
+        error_callback(env, callbackObject, filePath_, INIT_ENV_ERROR);
+    } else {
         jcallback_t jcallback = {
                 .env = env,
                 .callbackObject = callbackObject
@@ -829,7 +837,9 @@ Java_io_storj_libstorj_Storj__1deleteBucket(
 
     storj_env_t *storj_env = init_env(env, callbackObject, user, pass, NULL);
 
-    if (storj_env) {
+    if (!storj_env) {
+        error_callback(env, callbackObject, INIT_ENV_ERROR);
+    } else {
         jcallback_t jcallback = {
                 .env = env,
                 .callbackObject = callbackObject
@@ -894,7 +904,9 @@ Java_io_storj_libstorj_Storj__1deleteFile(
 
     storj_env_t *storj_env = init_env(env, callbackObject, user, pass, NULL);
 
-    if (storj_env) {
+    if (!storj_env) {
+        error_callback(env, callbackObject, INIT_ENV_ERROR);
+    } else {
         jcallback_t jcallback = {
                 .env = env,
                 .callbackObject = callbackObject
@@ -962,7 +974,9 @@ Java_io_storj_libstorj_Storj__1register(
 
     storj_env_t *storj_env = init_env(env, callbackObject, user, pass, NULL);
 
-    if (storj_env) {
+    if (!storj_env) {
+        error_callback(env, callbackObject, INIT_ENV_ERROR);
+    } else {
         jcallback_t jcallback = {
                 .env = env,
                 .callbackObject = callbackObject
@@ -1032,7 +1046,9 @@ Java_io_storj_libstorj_Storj__1getInfo(
         jobject callbackObject) {
     storj_env_t *storj_env = init_env(env, callbackObject, NULL, NULL, NULL);
 
-    if (storj_env) {
+    if (!storj_env) {
+        error_callback(env, callbackObject, INIT_ENV_ERROR);
+    } else {
         jcallback_t jcallback = {
                 .env = env,
                 .callbackObject = callbackObject
