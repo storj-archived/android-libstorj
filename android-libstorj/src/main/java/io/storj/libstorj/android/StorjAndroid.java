@@ -18,6 +18,7 @@ package io.storj.libstorj.android;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.os.Environment;
 import android.system.ErrnoException;
 import android.system.Os;
 import android.util.Log;
@@ -35,7 +36,7 @@ public class StorjAndroid {
 
     private static final String TAG = "StorjAndroid";
 
-    private static boolean initialized = false;
+    private static Storj instance = null;
 
     private StorjAndroid() {
     }
@@ -45,7 +46,7 @@ public class StorjAndroid {
      *
      * <p>The returned instance will be an existing instance when possible.</p>
      *
-     * <p>Calling this method compared to {@link Storj#getInstance()} will do the required
+     * <p>Calling this method compared to the {@link Storj} constructor will do the required
      * initialization for the libstorj library to work correctly on Android. For example:</p>
      * <ul>
      *     <li>Set the app's internal data directory as the working directory</li>
@@ -58,28 +59,37 @@ public class StorjAndroid {
      */
     public static Storj getInstance(Context context) {
         synchronized (StorjAndroid.class) {
-            if (!initialized) {
+            if (instance == null) {
+                instance = new Storj();
                 initialize(context);
             }
         }
-        return Storj.getInstance();
+        return instance;
     }
 
     private static synchronized void initialize(Context context) {
-        setAppDir(context);
+        setConfigDir(context);
+        setDownloadDir();
         setTempDir(context);
         copyCABundle(context);
-        initialized = true;
     }
 
     /*
-     * The app directory is where the authentication files with encryption keys are created.
+     * The config directory is where the authentication files with encryption keys are created.
      * Usually this is done in the user's home directory. However, there is no such user's home
      * directory on the Android platform. Instead there is a separate data directory for each
      * Android application where it can write internal data files.
      */
-    private static void setAppDir(Context context) {
-        Storj.appDir = context.getFilesDir().getPath();
+    private static void setConfigDir(Context context) {
+        instance.setConfigDirectory(context.getFilesDir());
+    }
+
+    /*
+     * The download directory is the default location for downloading files. The factory sets it to
+     * the Android Downloads directory.
+     */
+    private static void setDownloadDir() {
+        instance.setDownloadDirectory(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
     }
 
     /*

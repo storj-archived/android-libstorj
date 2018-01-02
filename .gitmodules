@@ -1,0 +1,6 @@
+[submodule "java-libstorj"]
+	path = java-libstorj
+	url = https://github.com/Storj/java-libstorj.git
+[submodule "libstorj"]
+	path = libstorj
+	url = https://github.com/Storj/libstorj.git

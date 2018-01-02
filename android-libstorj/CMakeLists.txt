@@ -11,22 +11,32 @@ cmake_minimum_required(VERSION 3.4.1)
 # Gradle automatically packages shared libraries with your APK.
 
 add_library( # Sets the name of the library.
-             native-lib
+             storj-java
 
              # Sets the library as a shared library.
              SHARED
 
              # Provides a relative path to your source file(s).
-             src/main/cpp/native-lib.cpp
-             src/main/cpp/bip39.c
-             src/main/cpp/cli.c
-             src/main/cpp/crypto.c
-             src/main/cpp/downloader.c
-             src/main/cpp/http.c
-             src/main/cpp/rs.c
-             src/main/cpp/storj.c
-             src/main/cpp/uploader.c
-             src/main/cpp/utils.c )
+             ../java-libstorj/src/main/cpp/storj-java.cpp )
+
+add_library( # Sets the name of the library.
+             storj
+
+             # Sets the library as a static library.
+             STATIC
+
+             # Provides a relative path to source file(s).
+             ../libstorj/src/bip39.c
+             ../libstorj/src/cli.c
+             ../libstorj/src/crypto.c
+             ../libstorj/src/downloader.c
+             ../libstorj/src/http.c
+             ../libstorj/src/rs.c
+             ../libstorj/src/storj.c
+             ../libstorj/src/uploader.c
+             ../libstorj/src/utils.c )
+
+include_directories( include/ ../libstorj/src/ )
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -41,29 +51,20 @@ find_library( # Sets the name of the path variable.
               # you want CMake to locate.
               log )
 
+find_library( # Sets the name of the path variable.
+              zlib
+
+              # Specifies the name of the NDK library that
+              # you want CMake to locate.
+              z )
+
 # Specifies libraries CMake should link to your target library. You
 # can link multiple libraries, such as libraries you define in this
 # build script, prebuilt third-party libraries, or system libraries.
 
-target_link_libraries( # Specifies the target library.
-                       native-lib
-
-                       # Links the target library to the log library
-                       # included in the NDK.
-                       ${log-lib} )
-
-add_library( json-c
-             SHARED
-             IMPORTED )
-set_target_properties( # Specifies the target library.
-                       json-c
-
-                       # Specifies the parameter you want to define.
-                       PROPERTIES IMPORTED_LOCATION
-
-                       # Provides the path to the library you want to import.
-                       ${CMAKE_SOURCE_DIR}/libs/${ANDROID_ABI}/libjson-c.so )
-include_directories( include/ )
+add_library(json-c SHARED IMPORTED)
+set_target_properties(json-c
+  PROPERTIES IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/libs/${ANDROID_ABI}/libjson-c.so )
 
 add_library(crypto STATIC IMPORTED)
 set_target_properties(crypto
@@ -89,11 +90,4 @@ add_library(microhttpd SHARED IMPORTED)
 set_target_properties(microhttpd
   PROPERTIES IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/libs/${ANDROID_ABI}/libmicrohttpd.so )
 
-find_library( # Sets the name of the path variable.
-              zlib
-
-              # Specifies the name of the NDK library that
-              # you want CMake to locate.
-              z )
-
-target_link_libraries( native-lib json-c curl ssl crypto ${zlib} uv nettle microhttpd )
+target_link_libraries( storj-java storj json-c curl ssl crypto ${zlib} uv nettle microhttpd ${log-lib} )
