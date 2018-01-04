@@ -114,8 +114,4 @@ add_library(nettle STATIC IMPORTED)
 set_target_properties(nettle
   PROPERTIES IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/libs/${ANDROID_ABI}/libnettle.a)
 
-add_library(microhttpd SHARED IMPORTED)
-set_target_properties(microhttpd
-  PROPERTIES IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/libs/${ANDROID_ABI}/libmicrohttpd.so )
-
-target_link_libraries( storj-java storj json-c curl ssl crypto ${zlib} uv nettle microhttpd ${log-lib} )
+target_link_libraries( storj-java storj json-c curl ssl crypto ${zlib} uv nettle ${log-lib} )
