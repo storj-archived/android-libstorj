@@ -10,6 +10,8 @@ cmake_minimum_required(VERSION 3.4.1)
 # You can define multiple libraries, and CMake builds them for you.
 # Gradle automatically packages shared libraries with your APK.
 
+# JNI bridge to libstorj
+
 add_library( # Sets the name of the library.
              storj-java
 
@@ -18,6 +20,8 @@ add_library( # Sets the name of the library.
 
              # Provides a relative path to your source file(s).
              ../java-libstorj/src/main/cpp/storj-java.cpp )
+
+# libstorj
 
 add_library( # Sets the name of the library.
              storj
@@ -36,7 +40,35 @@ add_library( # Sets the name of the library.
              ../libstorj/src/uploader.c
              ../libstorj/src/utils.c )
 
-include_directories( include/ ../libstorj/src/ )
+# json-c
+
+execute_process(COMMAND sh autogen.sh WORKING_DIRECTORY ../json-c)
+execute_process(COMMAND ./configure WORKING_DIRECTORY ../json-c)
+
+add_library( # Sets the name of the library.
+             json-c
+
+             # Sets the library as a static library.
+             STATIC
+
+             # Provides a relative path to source file(s).
+             ../json-c/arraylist.c
+             ../json-c/debug.c
+             ../json-c/json_c_version.c
+             ../json-c/json_object.c
+             ../json-c/json_object_iterator.c
+             ../json-c/json_pointer.c
+             ../json-c/json_tokener.c
+             ../json-c/json_util.c
+             ../json-c/json_visit.c
+             ../json-c/linkhash.c
+             ../json-c/printbuf.c
+             ../json-c/random_seed.c
+             ../json-c/strerror_override.c )
+
+# Directories with headers
+
+include_directories( include/ ../libstorj/src/ ../ )
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -61,10 +93,6 @@ find_library( # Sets the name of the path variable.
 # Specifies libraries CMake should link to your target library. You
 # can link multiple libraries, such as libraries you define in this
 # build script, prebuilt third-party libraries, or system libraries.
-
-add_library(json-c SHARED IMPORTED)
-set_target_properties(json-c
-  PROPERTIES IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/libs/${ANDROID_ABI}/libjson-c.so )
 
 add_library(crypto STATIC IMPORTED)
 set_target_properties(crypto

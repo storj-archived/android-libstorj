@@ -4,3 +4,6 @@
 [submodule "libstorj"]
 	path = libstorj
 	url = https://github.com/Storj/libstorj.git
+[submodule "json-c"]
+	path = json-c
+	url = https://github.com/json-c/json-c.git
