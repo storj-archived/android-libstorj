@@ -8,6 +8,8 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/android-libstorj" />
+            <option value="$PROJECT_DIR$/java-libstorj" />
             <option value="$PROJECT_DIR$/libstorj" />
           </set>
         </option>
