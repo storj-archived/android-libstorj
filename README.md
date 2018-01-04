@@ -4,7 +4,7 @@ Android library for encrypted file transfer on the Storj network via bindings to
 
 The library includes:
 
-* Java API for working with the Storj network
+* [Java API](https://github.com/Storj/java-libstorj) for working with the Storj network
 * Pre-build native libraries: libstorj and all its dependencies (libuv, json-c, curl, openssl, etc.)
 
 ## Requirements
@@ -18,13 +18,13 @@ Add the Gradle dependency to the `build.gradle` file of the app module:
 
 ```
 dependencies {
-    compile 'io.storj:libstorj-android:0.2'
+    compile 'io.storj:libstorj-android:0.3'
 }
 ```
 
 ## Usage
 
-Use the [StorjAndroid](libstorj/src/main/java/io/storj/libstorj/android/StorjAndroid.java) factory to get an instance of the [Storj](libstorj/src/main/java/io/storj/libstorj/Storj.java) class, properly initialized for Android:
+Use the [StorjAndroid](android-libstorj/src/main/java/io/storj/libstorj/android/StorjAndroid.java) factory to get an instance of the [Storj](https://github.com/Storj/java-libstorj/blob/master/src/main/java/io/storj/libstorj/Storj.java) class, properly initialized for Android:
 
 ```java
 Storj storj = StorjAndroid.getInstance(getContext());

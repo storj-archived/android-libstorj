@@ -49,7 +49,8 @@ public class StorjAndroid {
      * <p>Calling this method compared to the {@link Storj} constructor will do the required
      * initialization for the libstorj library to work correctly on Android. For example:</p>
      * <ul>
-     *     <li>Set the app's internal data directory as the working directory</li>
+     *     <li>Set the app's internal data directory as the configuration directory</li>
+     *     <li>Set the Android Downloads directory as the default download location for files</li>
      *     <li>Set the app's cache directory as the temp directory</li>
      *     <li>Copy a CA Certs file to the device and configure libstorj to use it</li>
      * </ul>
