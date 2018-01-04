@@ -66,9 +66,56 @@ add_library( # Sets the name of the library.
              ../json-c/random_seed.c
              ../json-c/strerror_override.c )
 
+# libuv
+
+add_library( # Sets the name of the library.
+             uv
+
+             # Sets the library as a static library.
+             STATIC
+
+             # Provides a relative path to source file(s).
+             ../libuv/src/unix/android-ifaddrs.c
+             ../libuv/src/unix/async.c
+             ../libuv/src/unix/core.c
+             ../libuv/src/unix/dl.c
+             ../libuv/src/unix/fs.c
+             ../libuv/src/unix/getaddrinfo.c
+             ../libuv/src/unix/getnameinfo.c
+             ../libuv/src/unix/linux-core.c
+             ../libuv/src/unix/linux-inotify.c
+             ../libuv/src/unix/linux-syscalls.c
+             ../libuv/src/unix/loop-watcher.c
+             ../libuv/src/unix/loop.c
+             ../libuv/src/unix/no-fsevents.c
+             ../libuv/src/unix/no-proctitle.c
+             ../libuv/src/unix/pipe.c
+             ../libuv/src/unix/poll.c
+             ../libuv/src/unix/process.c
+             ../libuv/src/unix/procfs-exepath.c
+             ../libuv/src/unix/proctitle.c
+             ../libuv/src/unix/pthread-fixes.c
+             ../libuv/src/unix/signal.c
+             ../libuv/src/unix/stream.c
+             ../libuv/src/unix/sysinfo-loadavg.c
+             ../libuv/src/unix/tcp.c
+             ../libuv/src/unix/thread.c
+             ../libuv/src/unix/timer.c
+             ../libuv/src/unix/tty.c
+             ../libuv/src/unix/udp.c
+             ../libuv/src/fs-poll.c
+             ../libuv/src/inet.c
+             ../libuv/src/threadpool.c
+             ../libuv/src/uv-common.c
+             ../libuv/src/version.c )
+
 # Directories with headers
 
-include_directories( include/ ../libstorj/src/ ../ )
+include_directories( include/
+                     ../libstorj/src/
+                     ../
+                     ../libuv/include
+                     ../libuv/src )
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -105,10 +152,6 @@ set_target_properties(ssl
 add_library(curl STATIC IMPORTED)
 set_target_properties(curl
   PROPERTIES IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/libs/${ANDROID_ABI}/libcurl.a)
-
-add_library(uv STATIC IMPORTED)
-set_target_properties(uv
-  PROPERTIES IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/libs/${ANDROID_ABI}/libuv.a)
 
 add_library(nettle STATIC IMPORTED)
 set_target_properties(nettle
