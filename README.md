@@ -16,7 +16,7 @@ The library includes:
 
 Add the Gradle dependency to the `build.gradle` file of the app module:
 
-```
+```Gradle
 dependencies {
     compile 'io.storj:libstorj-android:0.3'
 }
