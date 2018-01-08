@@ -109,13 +109,59 @@ add_library( # Sets the name of the library.
              ../libuv/src/uv-common.c
              ../libuv/src/version.c )
 
+# nettle
+
+execute_process(COMMAND sh .bootstrap WORKING_DIRECTORY ../nettle)
+execute_process(COMMAND sh ./configure --disable-assembler WORKING_DIRECTORY ../nettle)
+
+add_definitions(-DSIZEOF_LONG=4)
+
+add_library( # Sets the name of the library.
+             nettle
+
+             # Sets the library as a static library.
+             STATIC
+
+             # Provides a relative path to source file(s).
+             ../nettle/aes-encrypt.c
+             ../nettle/aes-encrypt-internal.c
+             ../nettle/aes-encrypt-table.c
+             ../nettle/aes-set-key-internal.c
+             ../nettle/aes256-set-encrypt-key.c
+             ../nettle/base16-decode.c
+             ../nettle/base16-encode.c
+             ../nettle/base64-decode.c
+             ../nettle/base64-encode.c
+             ../nettle/ctr.c
+             ../nettle/gcm.c
+             ../nettle/gcm-aes256.c
+             ../nettle/hmac.c
+             ../nettle/hmac-sha256.c
+             ../nettle/hmac-sha512.c
+             ../nettle/memxor.c
+             ../nettle/memxor3.c
+             ../nettle/pbkdf2.c
+             ../nettle/pbkdf2-hmac-sha256.c
+             ../nettle/ripemd160.c
+             ../nettle/ripemd160-compress.c
+             ../nettle/sha256.c
+             ../nettle/sha256-compress.c
+             ../nettle/sha256-meta.c
+             ../nettle/sha512.c
+             ../nettle/sha512-compress.c
+             ../nettle/sha512-meta.c
+             ../nettle/version.c
+             ../nettle/write-be32.c
+             ../nettle/write-le32.c )
+
 # Directories with headers
 
 include_directories( include/
                      ../libstorj/src/
                      ../
                      ../libuv/include
-                     ../libuv/src )
+                     ../libuv/src
+                     ../nettle )
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -152,9 +198,5 @@ set_target_properties(ssl
 add_library(curl STATIC IMPORTED)
 set_target_properties(curl
   PROPERTIES IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/libs/${ANDROID_ABI}/libcurl.a)
-
-add_library(nettle STATIC IMPORTED)
-set_target_properties(nettle
-  PROPERTIES IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/libs/${ANDROID_ABI}/libnettle.a)
 
 target_link_libraries( storj-java storj json-c curl ssl crypto ${zlib} uv nettle ${log-lib} )
