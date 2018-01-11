@@ -6,7 +6,6 @@
       <module fileurl="file://$PROJECT_DIR$/android-libstorj/android-libstorj-android-libstorj.iml" filepath="$PROJECT_DIR$/android-libstorj/android-libstorj-android-libstorj.iml" />
       <module fileurl="file://$PROJECT_DIR$/java-libstorj/java-libstorj.iml" filepath="$PROJECT_DIR$/java-libstorj/java-libstorj.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/libstorj/libstorj.iml" filepath="$PROJECT_DIR$/.idea/modules/libstorj/libstorj.iml" />
-      <module fileurl="file://$PROJECT_DIR$/libstorj/libstorj.iml" filepath="$PROJECT_DIR$/libstorj/libstorj.iml" />
     </modules>
   </component>
 </project>

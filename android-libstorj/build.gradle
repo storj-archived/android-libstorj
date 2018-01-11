@@ -1,5 +1,12 @@
 apply plugin: 'com.android.library'
+apply plugin: 'de.undercouch.download'
 apply plugin: 'com.novoda.bintray-release'
+
+import de.undercouch.gradle.tasks.download.Download
+
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 
 android {
     compileSdkVersion 26
@@ -13,11 +20,6 @@ android {
         externalNativeBuild {
             cmake {
                 cppFlags ""
-            }
-            ndk {
-                // Specifies the ABI configurations of your native
-                // libraries Gradle should build and package with your APK.
-                abiFilters 'armeabi-v7a'
             }
         }
     }
@@ -46,9 +48,41 @@ buildscript {
         jcenter()
     }
     dependencies {
+        classpath 'de.undercouch:gradle-download-task:3.3.0'
         classpath 'com.novoda:bintray-release:0.5.0'
     }
 }
+
+def isLibsDirEmpty() {
+    Path libsDir = Paths.get(projectDir.getPath(), 'libs')
+    return !Files.exists(libsDir) || !Files.newDirectoryStream(libsDir).iterator().hasNext()
+}
+
+task downloadOpenSSLCurlZipFile(type: Download) {
+    src 'https://github.com/leenjewel/openssl_for_ios_and_android/releases/download/20170105/openssl_curl_for_ios_android.20170105.zip'
+    dest new File(buildDir, 'tmp/openssl_curl_for_ios_android.20170105.zip')
+    onlyIfModified true
+}
+
+task downloadAndUnzipFile(dependsOn: downloadOpenSSLCurlZipFile, type: Copy) {
+    from zipTree(downloadOpenSSLCurlZipFile.dest).matching {
+        include '**/android/**/lib/*.a'
+        exclude '**/protobuf*/**'
+    }
+    into new File(projectDir, 'libs')
+    includeEmptyDirs false
+    eachFile { details ->
+        details.path = details.path
+                .replaceFirst('output/android/', '')
+                .replaceFirst('curl-android-', '')
+                .replaceFirst('openssl-android-', '')
+                .replaceFirst('/lib', '')
+    }
+}
+
+downloadAndUnzipFile.onlyIf { isLibsDirEmpty() }
+downloadOpenSSLCurlZipFile.onlyIf { isLibsDirEmpty() }
+preBuild.dependsOn downloadAndUnzipFile
 
 publish {
     userOrg = 'kaloyan-raev'
@@ -60,10 +94,9 @@ publish {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':java-libstorj')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    testCompile 'junit:junit:4.12'
+    api project(':java-libstorj')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
