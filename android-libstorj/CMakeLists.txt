@@ -114,7 +114,21 @@ add_library( # Sets the name of the library.
 execute_process(COMMAND sh .bootstrap WORKING_DIRECTORY ../nettle)
 execute_process(COMMAND sh ./configure --disable-assembler WORKING_DIRECTORY ../nettle)
 
-add_definitions(-DSIZEOF_LONG=4)
+if(ARMEABI)
+    add_definitions(-DSIZEOF_LONG=4)
+elseif(ARMEABI_V7A)
+    add_definitions(-DSIZEOF_LONG=4)
+elseif(ARM64_V8A)
+    add_definitions(-DSIZEOF_LONG=8)
+elseif(X86)
+    add_definitions(-DSIZEOF_LONG=4)
+elseif(X86_64)
+    add_definitions(-DSIZEOF_LONG=8)
+elseif(MIPS)
+    add_definitions(-DSIZEOF_LONG=4)
+elseif(MIPS64)
+    add_definitions(-DSIZEOF_LONG=8)
+endif()
 
 add_library( # Sets the name of the library.
              nettle
