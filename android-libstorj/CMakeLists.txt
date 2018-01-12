@@ -168,6 +168,13 @@ add_library( # Sets the name of the library.
              ../nettle/write-be32.c
              ../nettle/write-le32.c )
 
+# Disable compiler optimization for Nettle. For some reason the compiler
+# optimization causes issues with decryption.
+
+target_compile_options( nettle PRIVATE
+                        "$<$<CONFIG:RELEASE>:-O0>"
+                        "$<$<CONFIG:DEBUG>:-O0>" )
+
 # Directories with headers
 
 include_directories( include/
