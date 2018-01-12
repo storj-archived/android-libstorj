@@ -10,7 +10,6 @@ The library includes:
 ## Requirements
 
 * Android 5.0 Lollipop or newer
-* armeabi-v7a compatible device (most phones and tablets)
 
 ## Setup
 
@@ -18,7 +17,7 @@ Add the Gradle dependency to the `build.gradle` file of the app module:
 
 ```Gradle
 dependencies {
-    compile 'io.storj:libstorj-android:0.3.2'
+    compile 'io.storj:libstorj-android:0.4'
 }
 ```
 
