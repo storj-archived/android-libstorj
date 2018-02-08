@@ -14,8 +14,8 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 7
-        versionName "0.5"
+        versionCode 8
+        versionName "0.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
@@ -88,7 +88,7 @@ publish {
     userOrg = 'kaloyan-raev'
     groupId = 'io.storj'
     artifactId = 'libstorj-android'
-    publishVersion = '0.5'
+    publishVersion = '0.6'
     desc = 'Libstorj for Android'
     website = 'https://github.com/Storj/android-libstorj'
 }
