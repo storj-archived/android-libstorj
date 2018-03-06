@@ -68,7 +68,7 @@ public class StorjAndroid {
         return instance;
     }
 
-    private static synchronized void initialize(Context context) {
+    private static void initialize(Context context) {
         setConfigDir(context);
         setDownloadDir();
         setTempDir(context);
