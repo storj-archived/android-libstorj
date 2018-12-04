@@ -26,6 +26,8 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.util.Objects;
 
 import io.storj.libstorj.Storj;
 
@@ -37,6 +39,8 @@ public class StorjAndroid {
     private static final String TAG = "StorjAndroid";
 
     private static Storj instance = null;
+    private static String bridgeUrl = null;
+    private static boolean initialized = false;
 
     private StorjAndroid() {
     }
@@ -58,10 +62,15 @@ public class StorjAndroid {
      * @param context a reference to {@link Context} to retrieve info about the app environment
      * @return a {@link Storj} instance, never null
      */
-    public static Storj getInstance(Context context) {
+    public static Storj getInstance(Context context, String bridgeUrl) throws MalformedURLException {
         synchronized (StorjAndroid.class) {
-            if (instance == null) {
-                instance = new Storj();
+            if (instance == null || !Objects.equals(bridgeUrl, StorjAndroid.bridgeUrl)) {
+                if (bridgeUrl == null) {
+                    instance = new Storj();
+                } else {
+                    instance = new Storj(bridgeUrl);
+                }
+                StorjAndroid.bridgeUrl = bridgeUrl;
                 initialize(context);
             }
         }
@@ -69,10 +78,13 @@ public class StorjAndroid {
     }
 
     private static void initialize(Context context) {
-        setConfigDir(context);
-        setDownloadDir();
-        setTempDir(context);
-        copyCABundle(context);
+        if (!initialized) {
+            setConfigDir(context);
+            setDownloadDir();
+            setTempDir(context);
+            copyCABundle(context);
+            initialized = true;
+        }
     }
 
     /*
