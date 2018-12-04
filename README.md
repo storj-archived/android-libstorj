@@ -19,7 +19,7 @@ Add the Gradle dependency to the `build.gradle` file of the app module:
 
 ```Gradle
 dependencies {
-    compile 'io.storj:libstorj-android:0.7.2'
+    compile 'io.storj:libstorj-android:0.8'
 }
 ```
 
