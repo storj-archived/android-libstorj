@@ -51,12 +51,12 @@ public class StorjAndroid {
      * <p>The returned instance will be an existing instance when possible.</p>
      *
      * <p>Calling this method compared to the {@link Storj} constructor will do the required
-     * initialization for the libstorj library to work correctly on Android. For example:</p>
+     * initialization for the io.storj.libstorj library to work correctly on Android. For example:</p>
      * <ul>
      *     <li>Set the app's internal data directory as the configuration directory</li>
      *     <li>Set the Android Downloads directory as the default download location for files</li>
      *     <li>Set the app's cache directory as the temp directory</li>
-     *     <li>Copy a CA Certs file to the device and configure libstorj to use it</li>
+     *     <li>Copy a CA Certs file to the device and configure io.storj.libstorj to use it</li>
      * </ul>
      *
      * @param context a reference to {@link Context} to retrieve info about the app environment
@@ -82,7 +82,6 @@ public class StorjAndroid {
             setConfigDir(context);
             setDownloadDir();
             setTempDir(context);
-            copyCABundle(context);
             initialized = true;
         }
     }
@@ -106,7 +105,7 @@ public class StorjAndroid {
     }
 
     /*
-     * The sharding process in libstorj requires the usage of the temp directory. However, there is
+     * The sharding process in io.storj.libstorj requires the usage of the temp directory. However, there is
      * no global temp directory in the Android platform. The Android app should set the temp
      * directory to the app's cache directory using the STORJ_TEMP environment variable.
      */
@@ -115,35 +114,6 @@ public class StorjAndroid {
             Os.setenv("STORJ_TEMP", context.getCacheDir().getPath(), true);
         } catch (ErrnoException e) {
             Log.e(TAG, e.getMessage(), e);
-        }
-    }
-
-    /*
-     * The libstorj library uses curl to communicate with the Storj Bridge API hosted at
-     * https://api.storj.io over a secured HTTPS connection. The proper establishment of the
-     * secure connection requires that the server certificate is verified. The verification is
-     * done against a set of Trusted Root Certificates stored in the so called CA Certs file.
-     *
-     * Unfortunately, Android does not provide such CA Certs file. Hence the factory will extract
-     * a proper CA Certs file from its assets/ directory to the app's internal data directory.
-     */
-    private static void copyCABundle(final Context context) {
-        String filename = "cacert.pem";
-        AssetManager assetManager = context.getAssets();
-        try (InputStream in = assetManager.open(filename);
-             OutputStream out = context.openFileOutput(filename, Context.MODE_PRIVATE)) {
-            copy(in, out);
-            Os.setenv("STORJ_CAINFO", context.getFileStreamPath(filename).getPath(), true);
-        } catch (IOException | ErrnoException e) {
-            Log.e(TAG, e.getMessage(), e);
-        }
-    }
-
-    private static void copy(InputStream in, OutputStream out) throws IOException {
-        byte[] buffer = new byte[4096];
-        int read;
-        while((read = in.read(buffer)) != -1){
-            out.write(buffer, 0, read);
         }
     }
 

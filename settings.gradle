@@ -1,1 +1,1 @@
-include ':android-libstorj', ':java-libstorj', ':libstorj'
+include ':android-libstorj'
