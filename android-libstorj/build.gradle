@@ -6,8 +6,8 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 12
-        versionName "0.9"
+        versionCode 13
+        versionName "0.9.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -33,7 +33,7 @@ publish {
     userOrg = 'kaloyan-raev'
     groupId = 'io.storj'
     artifactId = 'libstorj-android-v3'
-    publishVersion = '0.9'
+    publishVersion = '0.9.1'
     desc = 'Libstorj for Android (Storj V3 compatible)'
     website = 'https://github.com/storj/android-libstorj'
 }
@@ -42,5 +42,5 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation 'io.storj:libuplink-android:0.1'
+    implementation 'io.storj:libuplink-android:0.1.1'
 }
