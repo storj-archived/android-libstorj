@@ -59,6 +59,11 @@ public class Storj {
     public static final int NO_ERROR = 0;
 
     /**
+     * Error code if there is an error that cannot be categorized.
+     */
+    public static final int GENERIC_ERROR = -1;
+
+    /**
      * Error code if file transfer was canceled.
      */
     public static final int TRANSFER_CANCELED = 1;
@@ -1761,7 +1766,7 @@ public class Storj {
                 }
             });
         } catch (Exception e) {
-            callback.onError(0, e.getMessage());
+            callback.onError(GENERIC_ERROR, e.getMessage());
         }
     }
 
@@ -1777,7 +1782,7 @@ public class Storj {
                 }
             });
         } catch (Exception e) {
-            callback.onError(bucketId, 0, e.getMessage());
+            callback.onError(bucketId, GENERIC_ERROR, e.getMessage());
         }
     }
 
@@ -1793,7 +1798,7 @@ public class Storj {
                 }
             });
         } catch (Exception e) {
-            callback.onError(bucketName, 0, e.getMessage());
+            callback.onError(bucketName, GENERIC_ERROR, e.getMessage());
         }
     }
 
@@ -1809,7 +1814,7 @@ public class Storj {
                 }
             });
         } catch (Exception e) {
-            callback.onError(bucketName, 0, e.getMessage());
+            callback.onError(bucketName, GENERIC_ERROR, e.getMessage());
         }
     }
 
@@ -1823,7 +1828,7 @@ public class Storj {
                 }
             });
         } catch (Exception e) {
-            callback.onError(bucketId, 0, e.getMessage());
+            callback.onError(bucketId, GENERIC_ERROR, e.getMessage());
         }
     }
 
@@ -1856,7 +1861,7 @@ public class Storj {
                 }
             });
         } catch (Exception e) {
-            callback.onError(bucketId, 0, e.getMessage());
+            callback.onError(bucketId, GENERIC_ERROR, e.getMessage());
         }
     }
 
@@ -1873,7 +1878,7 @@ public class Storj {
                 }
             });
         } catch (Exception e) {
-            callback.onError(fileId, 0, e.getMessage());
+            callback.onError(fileId, GENERIC_ERROR, e.getMessage());
         }
     }
 
@@ -1890,7 +1895,7 @@ public class Storj {
                 }
             });
         } catch (Exception e) {
-            callback.onError(fileName, 0, e.getMessage());
+            callback.onError(fileName, GENERIC_ERROR, e.getMessage());
         }
     }
 
@@ -1904,7 +1909,7 @@ public class Storj {
                 }
             });
         } catch (Exception e) {
-            callback.onError(fileId, 0, e.getMessage());
+            callback.onError(fileId, GENERIC_ERROR, e.getMessage());
         }
     }
 
@@ -1947,7 +1952,7 @@ public class Storj {
                         }
                     });
                 } catch (Exception e) {
-                    callback.onError(fileId, 0, e.getMessage());
+                    callback.onError(fileId, GENERIC_ERROR, e.getMessage());
                 }
             }
         }).start();
@@ -2004,7 +2009,7 @@ public class Storj {
                         }
                     });
                 } catch (Exception e) {
-                    callback.onError(localPath, 0, e.getMessage());
+                    callback.onError(localPath, GENERIC_ERROR, e.getMessage());
                 }
             }
         }).start();
