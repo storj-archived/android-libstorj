@@ -1,13 +1,11 @@
 # android-libstorj
 
-**Notice: Development on android-libstorj is currently on pause during our v3 rearchitecture. Please see [storj/storj](https://github.com/storj/storj) for ongoing v3 development.**
+**Notice: This branch (v3) contains a mostly backward-compatible implementation of the android-libstorj library to work with Storj V3. The goal of this implementation is to provide a migration step towards Storj V3 for Android apps built for Storj V2. This implementation won't be maintained and supported for the long term. Once we have the official Android library for Storj V3 ready, it will be the replacement for this implementation. Please see [storj/storj](https://github.com/storj/storj) for ongoing v3 development.**
 
-Android library for encrypted file transfer on the Storj network via bindings to [libstorj](https://github.com/Storj/libstorj).
-
-The library includes:
-
-* [Java API](https://github.com/Storj/java-libstorj) for working with the Storj network
-* Pre-build native libraries: libstorj and all its dependencies (libuv, json-c, curl, openssl, etc.)
+The backward-incompatible changes compared to the master branch of android-libstorj include:
+- Account registration is not suppored anymore. App developers should use the Web API to Storj V3 satellites to register new user accounts and obtain API keys.
+- The [Keys](android-libstorj/src/main/java/io/storj/libstorj/Keys.java) class changed from using user, password and mnemonic to using API key and encryption key. This is required to reflect the changed key management in Storj V3.
+- Error handling is not as fine-grained as in the previous versions that support Storj V2. App developers should not rely on receiving an adequate error code. In most cases the error code will be either [GENERIC_ERROR](android-libstorj/blob/eeeb26c96c4701912d2c3ef08cd1a844cd042a65/android-libstorj/src/main/java/io/storj/libstorj/Storj.java#L66)  or [TRANSFER_CANCELED](android-libstorj/blob/eeeb26c96c4701912d2c3ef08cd1a844cd042a65/android-libstorj/src/main/java/io/storj/libstorj/Storj.java#L71).
 
 ## Requirements
 
@@ -19,19 +17,19 @@ Add the Gradle dependency to the `build.gradle` file of the app module:
 
 ```Gradle
 dependencies {
-    compile 'io.storj:libstorj-android:0.8'
+    implementation 'io.storj:libstorj-android-v3:0.9.1'
 }
 ```
 
 ## Usage
 
-Use the [StorjAndroid](android-libstorj/src/main/java/io/storj/libstorj/android/StorjAndroid.java) factory to get an instance of the [Storj](https://github.com/Storj/java-libstorj/blob/master/src/main/java/io/storj/libstorj/Storj.java) class, properly initialized for Android:
+Use the [StorjAndroid](android-libstorj/src/main/java/io/storj/libstorj/android/StorjAndroid.java) factory to get an instance of the [Storj](android-libstorj/src/main/java/io/storj/libstorj/Storj.java) class, properly initialized for Android:
 
 ```java
 Storj storj = StorjAndroid.getInstance(getContext());
 ```
 
-Use the public methods of the [Storj](https://github.com/Storj/java-libstorj/blob/master/src/main/java/io/storj/libstorj/Storj.java) class to work with the Storj network.
+Use the public methods of the [Storj](android-libstorj/src/main/java/io/storj/libstorj/Storj.java) class to work with the Storj network.
 
 ## Sample app
 
