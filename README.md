@@ -2,6 +2,8 @@
 
 **Notice: Development on android-libstorj is currently on pause during our v3 rearchitecture. Please see [storj/storj](https://github.com/storj/storj) for ongoing v3 development.**
 
+**Check the [v3 branch](https://github.com/storj/android-libstorj/tree/v3) for implementation that works with Storj V3.**
+
 Android library for encrypted file transfer on the Storj network via bindings to [libstorj](https://github.com/Storj/libstorj).
 
 The library includes:
