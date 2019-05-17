@@ -27,9 +27,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import io.storj.libuplink.mobile.BucketAccess;
@@ -428,6 +430,7 @@ public class Storj {
 
     private ConcurrentHashMap<Long, Reader> downloads = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Long, Writer> uploads = new ConcurrentHashMap<>();
+    private Set<Long> cancellations = Collections.newSetFromMap(new ConcurrentHashMap<Long, Boolean>());
 
     private static String getVersion() {
         try {
@@ -1952,7 +1955,12 @@ public class Storj {
                         }
                     });
                 } catch (Exception e) {
-                    callback.onError(fileId, GENERIC_ERROR, e.getMessage());
+                    boolean cancelled = cancellations.remove(state);
+                    if (cancelled) {
+                        callback.onError(fileId, TRANSFER_CANCELED, "Cancelled");
+                    } else {
+                        callback.onError(fileId, GENERIC_ERROR, e.getMessage());
+                    }
                 }
             }
         }).start();
@@ -1964,6 +1972,7 @@ public class Storj {
         Reader reader = downloads.get(downloadState);
         if (reader != null) {
             reader.cancel();
+            cancellations.add(downloadState);
             return true;
         }
         return false;
@@ -2009,7 +2018,12 @@ public class Storj {
                         }
                     });
                 } catch (Exception e) {
-                    callback.onError(localPath, GENERIC_ERROR, e.getMessage());
+                    boolean cancelled = cancellations.remove(state);
+                    if (cancelled) {
+                        callback.onError(localPath, TRANSFER_CANCELED, "Cancelled");
+                    } else{
+                        callback.onError(localPath, GENERIC_ERROR, e.getMessage());
+                    }
                 }
             }
         }).start();
@@ -2021,6 +2035,7 @@ public class Storj {
         Writer writer = uploads.get(uploadState);
         if (writer != null) {
             writer.cancel();
+            cancellations.add(uploadState);
             return true;
         }
         return false;
