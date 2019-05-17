@@ -5,7 +5,7 @@
 The backward-incompatible changes compared to the master branch of android-libstorj include:
 - Account registration is not suppored anymore. App developers should use the Web API to Storj V3 satellites to register new user accounts and obtain API keys.
 - The [Keys](android-libstorj/src/main/java/io/storj/libstorj/Keys.java) class changed from using user, password and mnemonic to using API key and encryption key. This is required to reflect the changed key management in Storj V3.
-- Error handling is not as fine-grained as in the previous versions that support Storj V2. App developers should not rely on receiving an adequate error code. In most cases the error code will be either [GENERIC_ERROR](android-libstorj/blob/eeeb26c96c4701912d2c3ef08cd1a844cd042a65/android-libstorj/src/main/java/io/storj/libstorj/Storj.java#L66)  or [TRANSFER_CANCELED](android-libstorj/blob/eeeb26c96c4701912d2c3ef08cd1a844cd042a65/android-libstorj/src/main/java/io/storj/libstorj/Storj.java#L71).
+- Error handling is not as fine-grained as in the previous versions that support Storj V2. App developers should not rely on receiving an adequate error code. In most cases the error code will be either [GENERIC_ERROR](https://github.com/storj/android-libstorj/blob/eeeb26c96c4701912d2c3ef08cd1a844cd042a65/android-libstorj/src/main/java/io/storj/libstorj/Storj.java#L66)  or [TRANSFER_CANCELED](https://github.com/storj/android-libstorj/blob/eeeb26c96c4701912d2c3ef08cd1a844cd042a65/android-libstorj/src/main/java/io/storj/libstorj/Storj.java#L71).
 
 ## Requirements
 
