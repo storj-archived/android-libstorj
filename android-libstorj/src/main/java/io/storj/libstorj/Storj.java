@@ -1715,10 +1715,7 @@ public class Storj {
         Config config = new Config();
         Uplink uplink = new Uplink(config, System.getenv("STORJ_TEMP"));
         try {
-            ProjectOptions options = new ProjectOptions();
-            options.setEncryptionKey(keys.getEncryptionKey().getBytes());
-
-            Project project = uplink.openProject(addr, keys.getApiKey(), options);
+            Project project = uplink.openProject(addr, keys.getApiKey());
             try {
                 runnable.run(project);
             } finally {
@@ -1733,8 +1730,7 @@ public class Storj {
         runInProject(new ProjectRunnable() {
             @Override
             public void run(Project project) throws Exception {
-                BucketAccess access = new BucketAccess();
-                access.setPathEncryptionKey(keys.getEncryptionKey().getBytes());
+                EncryptionAccess access = ParseEncryptionAccess(keys.getEncryptionKey().getBytes());
                 io.storj.libuplink.mobile.Bucket bucket = project.openBucket(bucketId, access);
                 try {
                     runnable.run(bucket);
