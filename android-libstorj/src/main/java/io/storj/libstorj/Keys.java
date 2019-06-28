@@ -21,25 +21,25 @@ package io.storj.libstorj;
  * <ul>
  * <li>Satellite address
  * <li>API key
- * <li>Encryption key for encrypting and decrypting the transferred files
+ * <li>Encryption access for encrypting and decrypting the transferred files
  * </ul>
  */
 public class Keys {
 
     private String apiKey;
-    private String encryptionKey;
+    private String encryptionAccess;
 
     /**
      * Constructs a new Keys object with the provided credentials.
      *
      * @param apiKey
      *            an API key
-     * @param encryptionKey
-     *            an encryption key
+     * @param encryptionAccess
+     *            a serialized encryption access
      */
-    public Keys(String apiKey, String encryptionKey) {
+    public Keys(String apiKey, String encryptionAccess) {
         this.apiKey = apiKey;
-        this.encryptionKey = encryptionKey;
+        this.encryptionAccess = encryptionAccess;
     }
 
     /**
@@ -52,11 +52,11 @@ public class Keys {
     }
 
     /**
-     * Returns the encryption key.
+     * Returns the serialized encryption access.
      * 
-     * @return an encryption key
+     * @return a serialized encryption access
      */
-    public String getEncryptionKey() {
-        return encryptionKey;
+    public String getEncryptionContext() {
+        return encryptionAccess;
     }
 }

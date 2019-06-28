@@ -34,16 +34,16 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import io.storj.libuplink.mobile.BucketAccess;
 import io.storj.libuplink.mobile.BucketConfig;
 import io.storj.libuplink.mobile.BucketInfo;
 import io.storj.libuplink.mobile.BucketList;
 import io.storj.libuplink.mobile.Config;
+import io.storj.libuplink.mobile.EncryptionAccess;
 import io.storj.libuplink.mobile.ListOptions;
+import io.storj.libuplink.mobile.Mobile;
 import io.storj.libuplink.mobile.ObjectInfo;
 import io.storj.libuplink.mobile.ObjectList;
 import io.storj.libuplink.mobile.Project;
-import io.storj.libuplink.mobile.ProjectOptions;
 import io.storj.libuplink.mobile.Reader;
 import io.storj.libuplink.mobile.ReaderOptions;
 import io.storj.libuplink.mobile.Uplink;
@@ -705,7 +705,7 @@ public class Storj {
                 return null;
             }
 
-            keys = new Keys(props.getProperty("api-key"), props.getProperty("enc-key"));
+            keys = new Keys(props.getProperty("api-key"), props.getProperty("enc-ctx"));
         }
         return keys;
     }
@@ -728,7 +728,7 @@ public class Storj {
     public boolean importKeys(Keys keys, String passphrase) {
         Properties props = new Properties();
         props.setProperty("api-key", keys.getApiKey());
-        props.setProperty("enc-key", keys.getEncryptionKey());
+        props.setProperty("enc-ctx", keys.getEncryptionContext());
 
         try {
             props.store(new FileWriter(getAuthFile()), null);
@@ -1715,10 +1715,7 @@ public class Storj {
         Config config = new Config();
         Uplink uplink = new Uplink(config, System.getenv("STORJ_TEMP"));
         try {
-            ProjectOptions options = new ProjectOptions();
-            options.setEncryptionKey(keys.getEncryptionKey().getBytes());
-
-            Project project = uplink.openProject(addr, keys.getApiKey(), options);
+            Project project = uplink.openProject(addr, keys.getApiKey());
             try {
                 runnable.run(project);
             } finally {
@@ -1733,9 +1730,8 @@ public class Storj {
         runInProject(new ProjectRunnable() {
             @Override
             public void run(Project project) throws Exception {
-                BucketAccess access = new BucketAccess();
-                access.setPathEncryptionKey(keys.getEncryptionKey().getBytes());
-                io.storj.libuplink.mobile.Bucket bucket = project.openBucket(bucketId, access);
+                EncryptionAccess encryption = Mobile.parseEncryptionAccess(keys.getEncryptionContext());
+                io.storj.libuplink.mobile.Bucket bucket = project.openBucket(bucketId, encryption);
                 try {
                     runnable.run(bucket);
                 } finally {
