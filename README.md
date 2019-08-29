@@ -17,7 +17,7 @@ Add the Gradle dependency to the `build.gradle` file of the app module:
 
 ```Gradle
 dependencies {
-    implementation 'io.storj:libstorj-android-v3:0.11.0'
+    implementation 'io.storj:libstorj-android-v3:0.12.0'
 }
 ```
 
