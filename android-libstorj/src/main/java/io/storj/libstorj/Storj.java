@@ -804,7 +804,7 @@ public class Storj {
             runInProject(new ProjectRunnable() {
                 @Override
                 public void run(Project project) throws Exception {
-                    project.listBuckets("", 2, 1);
+                    project.listBuckets("", 1);
                 }
             });
         } catch (Exception e) {
@@ -1751,7 +1751,7 @@ public class Storj {
                     String cursor = "";
 
                     do {
-                        BucketList bucketList = project.listBuckets(cursor, 2, 0);
+                        BucketList bucketList = project.listBuckets(cursor, 0);
                         for (int i = 0; i < bucketList.length(); i++) {
                             BucketInfo info = bucketList.item(i);
                             buckets.add(new Bucket(info.getName(), info.getName(),
