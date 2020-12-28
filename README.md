@@ -27,13 +27,13 @@ dependencies {
 
 ## Usage
 
-Use the [StorjAndroid](android-libstorj/src/main/java/io/storj/libstorj/android/StorjAndroid.java) factory to get an instance of the [Storj](https://github.com/Storj/java-libstorj/blob/master/src/main/java/io/storj/libstorj/Storj.java) class, properly initialized for Android:
+Use the [StorjAndroid](android-libstorj/src/main/java/io/storj/libstorj/android/StorjAndroid.java) factory to get an instance of the [Storj](https://github.com/Storj/java-libstorj/blob/main/src/main/java/io/storj/libstorj/Storj.java) class, properly initialized for Android:
 
 ```java
 Storj storj = StorjAndroid.getInstance(getContext());
 ```
 
-Use the public methods of the [Storj](https://github.com/Storj/java-libstorj/blob/master/src/main/java/io/storj/libstorj/Storj.java) class to work with the Storj network.
+Use the public methods of the [Storj](https://github.com/Storj/java-libstorj/blob/main/src/main/java/io/storj/libstorj/Storj.java) class to work with the Storj network.
 
 ## Sample app
 
